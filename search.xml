@@ -12,7 +12,7 @@
     
     <entry>
       <title><![CDATA[iOS多线程面试题]]></title>
-      <url>https://kynechen.github.io/2016/09/11/iOS%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%9D%A2%E8%AF%95%E9%A2%98/</url>
+      <url>https://kynechen.github.io/2016/09/11/iosdxc/</url>
       <content type="html"><![CDATA[<h3 id="1-多线程的底层实现？"><a href="#1-多线程的底层实现？" class="headerlink" title="1. 多线程的底层实现？"></a>1. 多线程的底层实现？</h3><ul>
 <li>首先搞清楚什么是线程、什么是多线程；</li>
 <li><a href="http://baike.baidu.com/link?url=v45sUsFkOYuo4ShOdTZ1c3bvxeaa53D9hfVSPi8qYWIvFNoxpKakrxcEZI45IBsIg_lfDrmplbcVZnHPByr11a" target="_blank" rel="external">Mach</a>（国际发音：[mʌk]）是第一个以多线程方式处理任务的系统，因此多线程的底层实现机制是基于Mach的线程；</li>
@@ -25,24 +25,20 @@
 </ul>
 </li>
 </ul>
-<p>###2. 线程间怎么通信？</p>
-<ul>
+<h3 id="2-线程间怎么通信？"><a href="#2-线程间怎么通信？" class="headerlink" title="2. 线程间怎么通信？"></a>2. 线程间怎么通信？</h3><ul>
 <li><code>performSelector:onThread:withObject:waitUntilDone:</code></li>
 <li><code>NSMachPort</code></li>
 </ul>
-<p>###3. 网络图片处理问题中怎么解决一个相同的网络地址重复请求问题？</p>
-<ul>
+<h3 id="3-网络图片处理问题中怎么解决一个相同的网络地址重复请求问题？"><a href="#3-网络图片处理问题中怎么解决一个相同的网络地址重复请求问题？" class="headerlink" title="3. 网络图片处理问题中怎么解决一个相同的网络地址重复请求问题？"></a>3. 网络图片处理问题中怎么解决一个相同的网络地址重复请求问题？</h3><ul>
 <li>利用字典（<em>图片地址为 key，下载操作为 value</em>）</li>
 </ul>
-<p>###4. 用NSOpertion和NSOpertionQueue处理A、B、C三个线程，要求执行完A、B后才能执行C，怎么做？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">//1. 创建队列</div><div class="line">NSOperationQueue *queue = [[NSOpertionQueue alloc] init];</div><div class="line">	</div><div class="line">//2. 创建3个操作</div><div class="line">NSOperation *a = [NSOperation blockOperationWithBlock:^&#123;</div><div class="line">NSLog(@&quot;operation---&quot;);</div><div class="line">&#125;];</div><div class="line">NSOperation *b = [NSOperation blockOperationWithBlock:^&#123;</div><div class="line">NSLog(@&quot;operation---&quot;);</div><div class="line">&#125;];</div><div class="line">NSOperation *c = [NSOperation blockOperationWithBlock:^&#123;</div><div class="line">NSLog(@&quot;operation---&quot;);</div><div class="line">&#125;];</div><div class="line">	</div><div class="line">//3. 添加依赖</div><div class="line">[c addDependency:a];</div><div class="line">[c addDependency:b];</div><div class="line">	</div><div class="line">//4. 执行操作</div><div class="line">[queue addOperation:a];</div><div class="line">[queue addOperation:b];</div><div class="line">[queue addOperation:c];</div></pre></td></tr></table></figure></p>
-<p>###5. 列举cocoa中常见的几种多线程的实现，并谈谈多线程安全的几种解决办法及多线程安全怎么控制？</p>
-<ul>
+<h3 id="4-用NSOpertion和NSOpertionQueue处理A、B、C三个线程，要求执行完A、B后才能执行C，怎么做？"><a href="#4-用NSOpertion和NSOpertionQueue处理A、B、C三个线程，要求执行完A、B后才能执行C，怎么做？" class="headerlink" title="4. 用NSOpertion和NSOpertionQueue处理A、B、C三个线程，要求执行完A、B后才能执行C，怎么做？"></a>4. 用NSOpertion和NSOpertionQueue处理A、B、C三个线程，要求执行完A、B后才能执行C，怎么做？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">//1. 创建队列</div><div class="line">NSOperationQueue *queue = [[NSOpertionQueue alloc] init];</div><div class="line">	</div><div class="line">//2. 创建3个操作</div><div class="line">NSOperation *a = [NSOperation blockOperationWithBlock:^&#123;</div><div class="line">NSLog(@&quot;operation---&quot;);</div><div class="line">&#125;];</div><div class="line">NSOperation *b = [NSOperation blockOperationWithBlock:^&#123;</div><div class="line">NSLog(@&quot;operation---&quot;);</div><div class="line">&#125;];</div><div class="line">NSOperation *c = [NSOperation blockOperationWithBlock:^&#123;</div><div class="line">NSLog(@&quot;operation---&quot;);</div><div class="line">&#125;];</div><div class="line">	</div><div class="line">//3. 添加依赖</div><div class="line">[c addDependency:a];</div><div class="line">[c addDependency:b];</div><div class="line">	</div><div class="line">//4. 执行操作</div><div class="line">[queue addOperation:a];</div><div class="line">[queue addOperation:b];</div><div class="line">[queue addOperation:c];</div></pre></td></tr></table></figure>
+<h3 id="5-列举cocoa中常见的几种多线程的实现，并谈谈多线程安全的几种解决办法及多线程安全怎么控制？"><a href="#5-列举cocoa中常见的几种多线程的实现，并谈谈多线程安全的几种解决办法及多线程安全怎么控制？" class="headerlink" title="5. 列举cocoa中常见的几种多线程的实现，并谈谈多线程安全的几种解决办法及多线程安全怎么控制？"></a>5. 列举cocoa中常见的几种多线程的实现，并谈谈多线程安全的几种解决办法及多线程安全怎么控制？</h3><ul>
 <li>只在主线程刷新访问UI；</li>
 <li>如果要防止资源抢夺，得用<code>synchronized</code>进行加锁保护；</li>
 <li>如果异步操作要保证线程安全等问题，尽量使用<code>GCD</code>（有些函数默认就是安全的。）</li>
 </ul>
-<p>###6. <em>GCD</em> 内部怎么实现的？</p>
-<ul>
+<h3 id="6-GCD-内部怎么实现的？"><a href="#6-GCD-内部怎么实现的？" class="headerlink" title="6. GCD 内部怎么实现的？"></a>6. <em>GCD</em> 内部怎么实现的？</h3><ul>
 <li>iOS和OS X的核心是<a href="https://en.wikipedia.org/wiki/XNU" target="_blank" rel="external">XNU</a>，GCD是基于XNU内核实现的；</li>
 <li>GCD的API全部在<code>libdispatch</code>库中；</li>
 <li>GCD的底层实现主要有<code>Dispatch Queue</code>和<code>Dispatch Source</code><ul>
@@ -51,8 +47,7 @@
 </ul>
 </li>
 </ul>
-<p>###7. 你用过NSOperationQueue么？如果用过或者了解的话，你为什么要使用NSOperationQueue，实现了什么？请描述它和GCD的区别和类似的地方（提示：可以从两者的实现机制和适用范围来描述)。</p>
-<ul>
+<h3 id="7-你用过NSOperationQueue么？如果用过或者了解的话，你为什么要使用NSOperationQueue，实现了什么？请描述它和GCD的区别和类似的地方（提示：可以从两者的实现机制和适用范围来描述-。"><a href="#7-你用过NSOperationQueue么？如果用过或者了解的话，你为什么要使用NSOperationQueue，实现了什么？请描述它和GCD的区别和类似的地方（提示：可以从两者的实现机制和适用范围来描述-。" class="headerlink" title="7. 你用过NSOperationQueue么？如果用过或者了解的话，你为什么要使用NSOperationQueue，实现了什么？请描述它和GCD的区别和类似的地方（提示：可以从两者的实现机制和适用范围来描述)。"></a>7. 你用过NSOperationQueue么？如果用过或者了解的话，你为什么要使用NSOperationQueue，实现了什么？请描述它和GCD的区别和类似的地方（提示：可以从两者的实现机制和适用范围来描述)。</h3><ul>
 <li>GCD是纯C语言的API，NSOPerationQueue是基于GCD的OC版本的封装；</li>
 <li>GCD只支持<em>FIFO</em>的队列，NSOPerationQueue可以很方便的调整执行顺序、设置最大并发数量；</li>
 <li>NSOPerationQueue可以轻松在Operation间设置依赖关系，而GCD需要写很多的代码才能实现；</li>
@@ -71,16 +66,14 @@
 </ul>
 <p>###8. 上题提到GCD，那么在使用GCD以及block时要注意些什么？它们俩是一回事吗？block在ARC中和传统的MRC中的行为和用法有没有什么区别？需要注意些什么？</p>
 <blockquote>
-<p>####Block的使用注意：</p>
-<ul>
+<h4 id="Block的使用注意："><a href="#Block的使用注意：" class="headerlink" title="Block的使用注意："></a>Block的使用注意：</h4><ul>
 <li>block的内存管理；</li>
 <li>防止循环retian；</li>
 <li>非ARC（MRC）：_block；</li>
 <li>ARC：_weak\ _unsafe _unretained</li>
 </ul>
 </blockquote>
-<p>###9. 在异步线程中下载很多图片，如果失败了，该如何处理？请结合RunLoop来谈谈解决方案。（提示：在异步线程中启动一个RunLoop重新发送网络请求，下载图片。）</p>
-<ul>
+<h3 id="9-在异步线程中下载很多图片，如果失败了，该如何处理？请结合RunLoop来谈谈解决方案。（提示：在异步线程中启动一个RunLoop重新发送网络请求，下载图片。）"><a href="#9-在异步线程中下载很多图片，如果失败了，该如何处理？请结合RunLoop来谈谈解决方案。（提示：在异步线程中启动一个RunLoop重新发送网络请求，下载图片。）" class="headerlink" title="9. 在异步线程中下载很多图片，如果失败了，该如何处理？请结合RunLoop来谈谈解决方案。（提示：在异步线程中启动一个RunLoop重新发送网络请求，下载图片。）"></a>9. 在异步线程中下载很多图片，如果失败了，该如何处理？请结合RunLoop来谈谈解决方案。（提示：在异步线程中启动一个RunLoop重新发送网络请求，下载图片。）</h3><ul>
 <li>重新下载图片；</li>
 <li>下载完毕，利用RunLoop的输入源回到主线程刷新UIImageView</li>
 </ul>
